@@ -5,19 +5,21 @@ type Props = {
   date: any,
   defaultView: any,
   views: any,
-  onDateChange: func,
+  onDateChange: any,
   slots: any,
   duration: any
 }
 
-export default class Qalendar extends React.PureComponent<Props> {
-  static defaultProps = {
-    views: ['month', 'week', 'day']
-  }
-
+class Qalendar extends React.PureComponent<Props> {
   render () {
     return (
       <p>Test</p>
     )
   }
 }
+
+Qalendar.defaultProps = {
+  views: ['month', 'week', 'day']
+}
+
+export default Qalendar
