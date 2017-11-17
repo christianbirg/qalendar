@@ -27,6 +27,11 @@ class DateProxy {
     return createDate(newDate, false)
   }
 
+  subtract = (amount, unit) => {
+    const newDate = moment(this._getUnderlyingDateObject()).subtract(amount, unit)
+    return createDate(newDate, false)
+  }
+
   format = (format) => {
     return this._getUnderlyingDateObject().format(format)
   }
