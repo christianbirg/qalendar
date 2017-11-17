@@ -43,7 +43,9 @@ Week.defaultProps = {
 }
 
 Week.propTypes = {
-
+  date: PropTypes.instanceOf(dateAdapter),
+  steps: PropTypes.number,
+  stepDuration: PropTypes.number
 }
 
 const Wrapper = styled.div`
