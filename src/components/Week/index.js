@@ -9,7 +9,11 @@ import TimeScale from '../TimeScale'
 import Day from '../Day'
 
 const Week = (props) => {
-  const { date, steps, stepDuration } = props
+  const { date } = props
+  const timeScaleProps = {
+    steps: props.steps,
+    stepDuration: props.stepDuration
+  }
 
   const days = []
   let currentDay = date.startOf('week')
@@ -23,10 +27,10 @@ const Week = (props) => {
     <Wrapper>
       <TimeScaleWrapper>
         <Header />
-        <TimeScale steps={steps} stepDuration={stepDuration} />
+        <TimeScale {...timeScaleProps} />
       </TimeScaleWrapper>
 
-      { renderDays(days) }
+      { renderDays(days, timeScaleProps) }
     </Wrapper>
   )
 }
@@ -56,12 +60,12 @@ const TimeScaleWrapper = styled.div`
   border-right: 1px solid #ddd;
 `
 
-const renderDays = (days) => days.map((day, index) => (
+const renderDays = (days, timeScaleProps) => days.map((day, index) => (
   <DayWrapper last={index === days.length - 1} key={`day:${day.format('dd:MM')}`}>
     <Header>
       { day.format('dd') }
     </Header>
-    <Day day={day} />
+    <Day day={day} {...timeScaleProps} />
   </DayWrapper>
 ))
 
