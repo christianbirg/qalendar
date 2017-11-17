@@ -1,17 +1,31 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { Icon } from '../Icon/Icon.js'
+import ArrowRightIcon from './ArrowRightIcon.js'
 
-export default ({ onBackPress, onForwardPress, year, ...props }) => (
+const YearSelector = ({ onBackPress, onForwardPress, year, ...props }) => (
   <Wrapper {...props}>
     <ArrowLeft onClick={onBackPress} />
+
     <Text>
       { year }
     </Text>
+
     <ArrowRight onClick={onForwardPress} />
   </Wrapper>
 )
+
+export default YearSelector
+
+YearSelector.propTypes = {
+  onBackPress: PropTypes.func.isRequired,
+  onForwardPress: PropTypes.func.isRequired,
+  year: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ])
+}
 
 const Wrapper = styled.div`
   display: flex;
@@ -19,6 +33,11 @@ const Wrapper = styled.div`
   align-items: center;
 
   background-color: #446CB3;
+
+  * {
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
 `
 
 const Text = styled.span`
@@ -31,9 +50,7 @@ const Text = styled.span`
   font-weight: 500;
 `
 
-const ArrowRight = styled(Icon).attrs({
-  source: require('./arrow_right.svg')
-})`
+const ArrowRight = styled(ArrowRightIcon)`
   padding: 0px;
   cursor: pointer;
   svg {

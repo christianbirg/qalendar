@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import moment from 'moment'
 import classiq from 'styled-classiq'
+
+import dateAdapter from '../../adapters/dateAdapter.js'
 
 import StandardYearSelector from './YearSelector.js'
 
@@ -11,7 +13,7 @@ class MonthPicker extends React.PureComponent {
 
     this.state = {
       year: props.year,
-      selectedMonth: props.selected || moment()
+      selectedMonth: props.selected
     }
     this.state.lines = this.calculateLines(this.state.year, this.state.selectedMonth)
   }
@@ -23,7 +25,7 @@ class MonthPicker extends React.PureComponent {
   }
 
   generateEntry = (month, selectedMonth, today) => ({
-    date: moment(month),
+    date: month,
     string: month.format('MMM'),
     isCurrent: month.isSame(today, 'month'),
     isSelected: month.isSame(selectedMonth, 'month')
@@ -31,10 +33,10 @@ class MonthPicker extends React.PureComponent {
 
   calculateLines = (year, selectedMonth) => {
     let lines = [ [] ]
-    const firstDayOfYear = moment(year).startOf('year')
-    const today = moment()
+    const firstDayOfYear = year.startOf('year')
+    const today = dateAdapter()
 
-    const month = moment(firstDayOfYear)
+    let month = firstDayOfYear
     while (month.isSame(year, 'year')) {
       lines[lines.length - 1].push(this.generateEntry(month, selectedMonth, today))
 
@@ -42,14 +44,14 @@ class MonthPicker extends React.PureComponent {
         lines.push([])
       }
 
-      month.add(1, 'month')
+      month = month.add(1, 'month')
     }
 
     return lines
   }
 
   selectPreviousYear = () => {
-    const year = moment(this.state.year).subtract(1, 'year')
+    const year = this.state.year.subtract(1, 'year')
     const lines = this.calculateLines(year, this.state.selectedMonth)
 
     this.setState({
@@ -59,7 +61,7 @@ class MonthPicker extends React.PureComponent {
   }
 
   selectNextYear = () => {
-    const year = moment(this.state.year).add(1, 'year')
+    const year = this.state.year.add(1, 'year')
     const lines = this.calculateLines(year, this.state.selectedMonth)
 
     this.setState({
@@ -119,10 +121,19 @@ class MonthPicker extends React.PureComponent {
 
 export default MonthPicker
 
+MonthPicker.defaultProps = {
+  selected: dateAdapter()
+}
+
+MonthPicker.propTypes = {
+  selected: PropTypes.instanceOf(dateAdapter),
+  year: PropTypes.instanceOf(dateAdapter),
+  onSelectMonth: PropTypes.func
+}
+
 const Wrapper = styled.div`
   width: 251px;
 
-  border: 1px solid #EAEAEA;
   background-color: white;
 
   user-select: none;
@@ -136,6 +147,9 @@ const YearSelector = styled(StandardYearSelector)`
 const Content = styled.div`
   padding: 8px;
   width: 100%;
+
+  border: 1px solid #EAEAEA;
+  border-top: none;
 `
 
 const Table = styled.table`
