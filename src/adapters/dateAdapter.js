@@ -22,6 +22,27 @@ class DateProxy {
     return createDate(newDate, false /* marks the object passed as a date instance */)
   }
 
+  set = (unit, amount) => {
+    const newDate = moment(this._getUnderlyingDateObject())
+
+    switch (unit) {
+      case 'day':
+        newDate.day(amount)
+        break
+      case 'hour':
+        newDate.hour(amount)
+        break
+      case 'minute':
+        newDate.minute(amount)
+        break
+      case 'second':
+        newDate.second(amount)
+        break
+    }
+
+    return newDate.isSame(this._getUnderlyingDateObject()) ? this : createDate(newDate, false)
+  }
+
   add = (amount, unit) => {
     const newDate = moment(this._getUnderlyingDateObject()).add(amount, unit)
     return createDate(newDate, false)
