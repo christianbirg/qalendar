@@ -20,11 +20,11 @@ const TimeScale = (props) => {
   return (
     <Wrapper>
       {
-        times.map((time) => {
+        times.map((time, index) => {
           const text = withoutText ? '' : time.format('HH:mm')
 
           return (
-            <TimeSlotGroup text={text} steps={steps} />
+            <TimeSlotGroup text={text} steps={steps} key={`TimeScale:${text}/${index}`} />
           )
         })
       }
