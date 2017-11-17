@@ -71,14 +71,15 @@ class Qalendar extends React.PureComponent {
   render () {
     return (
       <Wrapper>
-        <ControlPanel
-          date={this.state.date}
-          activeView={this.state.view}
-          onSelectDate={this.onSelectDate}
-          views={this.props.views}
-          onSelectView={this.onSelectView}
-        />
-
+        <ControlPanelWrapper>
+          <ControlPanel
+            date={this.state.date}
+            activeView={this.state.view}
+            onSelectDate={this.onSelectDate}
+            views={this.props.views}
+            onSelectView={this.onSelectView}
+          />
+        </ControlPanelWrapper>
         <ViewWrapper>
           { this.renderView() }
         </ViewWrapper>
@@ -104,7 +105,8 @@ export { default as Views } from './types/Views.js'
 Qalendar.defaultProps = {
   date: moment(),
   views: ViewsEnum,
-  defaultView: Views.week
+  defaultView: Views.week,
+  events: []
 }
 
 Qalendar.propTypes = {
@@ -118,16 +120,22 @@ Qalendar.propTypes = {
 }
 
 const Wrapper = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 8px;
 
   * {
     font-family: sans-serif;
   }
 `
 
+const ControlPanelWrapper = styled.div`
+  flex:  0 0 auto;
+`
+
 const ViewWrapper = styled.div`
   flex: 1 0 auto;
-
+  overflow: auto;
   border: 1px solid #ddd;
 `

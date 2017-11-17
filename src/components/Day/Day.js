@@ -180,7 +180,7 @@ class Day extends React.Component {
     const horizontalPosition = this.calculateHorizontalPosition(event)
     console.log(horizontalPosition)
 
-    return <Event style={{
+    return <Event key={event.id} style={{
       top: `${verticalPosition.top}%`,
       bottom: `${verticalPosition.bottom}%`,
       left: `${horizontalPosition.left}%`,
