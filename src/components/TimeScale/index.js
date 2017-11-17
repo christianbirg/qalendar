@@ -34,9 +34,13 @@ const TimeScale = (props) => {
 
 export default TimeScale
 
+TimeScale.defaultProps = {
+  withoutText: false
+}
+
 TimeScale.propTypes = {
-  steps: PropTypes.number,
-  stepDuration: PropTypes.number,
+  steps: PropTypes.number.isRequired,
+  stepDuration: PropTypes.number.isRequired,
   withoutText: PropTypes.bool
 }
 
