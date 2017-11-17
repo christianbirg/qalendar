@@ -52,4 +52,6 @@ const createDate = (value, arg1) => {
   return new DateProxy(value, arg1)
 }
 
+createDate.prototype = DateProxy.prototype
+
 export default createDate
