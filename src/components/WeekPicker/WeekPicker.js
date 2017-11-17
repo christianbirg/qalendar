@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import moment from 'moment'
 import classiq from 'styled-classiq'
+
+import dateAdapter from '../../adapters/dateAdapter.js'
 
 import StandardMonthSelector from './MonthSelector.js'
 
@@ -11,9 +13,9 @@ class WeekPicker extends React.PureComponent {
 
     this.state = {
       month: props.month,
-      selectedWeek: props.selected || moment()
+      selectedWeek: props.selected
     }
-    this.state.lines = this.calculateLines(this.state.month)
+    this.state.lines = this.calculateLines(this.state.month, this.state.selectedWeek)
   }
 
   componentWillReceiveProps (newProps) {
@@ -23,7 +25,7 @@ class WeekPicker extends React.PureComponent {
   }
 
   generateEntry = (day, today, selectedWeek, month) => ({
-    date: moment(day),
+    date: day,
     string: day.format('D'),
     isToday: day.isSame(today, 'day'),
     inMonth: day.isSame(month, 'month'),
@@ -32,20 +34,20 @@ class WeekPicker extends React.PureComponent {
 
   calculateLines = (month, selectedWeek) => {
     let lines = [ [] ]
-    const firstDayOfMonth = moment(month).startOf('month')
-    const today = moment()
+    const firstDayOfMonth = month.startOf('month')
+    const today = dateAdapter()
 
-    const day = moment(firstDayOfMonth).startOf('week')
-    const endOfWeek = moment(day).endOf('week')
+    let day = firstDayOfMonth.startOf('week')
+    let endOfWeek = day.endOf('week')
     while (day.isSameOrBefore(month, 'month')) {
       lines[lines.length - 1].push(this.generateEntry(day, today, selectedWeek, month))
 
       if (day.isSame(endOfWeek, 'day')) {
         lines.push([])
-        endOfWeek.add(7, 'day').endOf('week')
+        endOfWeek = endOfWeek.add(7, 'day').endOf('week')
       }
 
-      day.add(1, 'day')
+      day = day.add(1, 'day')
     }
 
     if (lines[lines.length - 1].length === 0) { // in case the last day of the month was a sunday
@@ -54,14 +56,14 @@ class WeekPicker extends React.PureComponent {
 
     while (lines[lines.length - 1].length < 7) {
       lines[lines.length - 1].push(this.generateEntry(day, today, selectedWeek, month))
-      day.add(1, 'day')
+      day = day.add(1, 'day')
     }
 
     return lines
   }
 
   selectPreviousMonth = () => {
-    const month = moment(this.state.month).subtract(1, 'month')
+    const month = this.state.month.subtract(1, 'month')
     const lines = this.calculateLines(month, this.state.selectedWeek)
 
     this.setState({
@@ -71,7 +73,7 @@ class WeekPicker extends React.PureComponent {
   }
 
   selectNextMonth = () => {
-    const month = moment(this.state.month).add(1, 'month')
+    const month = this.state.month.add(1, 'month')
     const lines = this.calculateLines(month, this.state.selectedWeek)
 
     this.setState({
@@ -119,11 +121,11 @@ class WeekPicker extends React.PureComponent {
   }
 
   renderHeader = () => {
-    const day = moment(this.state.month).startOf('week')
+    let day = this.state.month.startOf('week')
     const days = []
     for (let i = 0; i < 7; i++) {
       days.push(day.format('dd').slice(0, 2))
-      day.add(1, 'day')
+      day = day.add(1, 'day')
     }
 
     return days.map((day, index) => (
@@ -148,13 +150,26 @@ class WeekPicker extends React.PureComponent {
 
 export default WeekPicker
 
+WeekPicker.defaultProps = {
+  selected: dateAdapter()
+}
+
+WeekPicker.propTypes = {
+  selected: PropTypes.instanceOf(dateAdapter),
+  month: PropTypes.instanceOf(dateAdapter).isRequired,
+  onSelectWeek: PropTypes.func.isRequired
+}
+
 const Wrapper = styled.div`
   width: 251px;
-
-  border: 1px solid #EAEAEA;
   background-color: white;
 
   user-select: none;
+
+  * {
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
 `
 
 const MonthSelector = styled(StandardMonthSelector)`
@@ -164,6 +179,9 @@ const MonthSelector = styled(StandardMonthSelector)`
 
 const Content = styled.div`
   padding: 8px;
+
+  border: 1px solid #EAEAEA;
+  border-top: none;
 `
 
 const Table = styled.table`

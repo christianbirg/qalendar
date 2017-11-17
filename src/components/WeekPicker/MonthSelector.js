@@ -1,9 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import { Icon } from '../Icon/Icon.js'
+import ArrowRightIcon from './ArrowRightIcon.js'
 
-export default ({ onBackPress, onForwardPress, month, ...props }) => (
+const MonthSelector = ({ onBackPress, onForwardPress, month, ...props }) => (
   <Wrapper {...props}>
     <ArrowLeft onClick={onBackPress} />
     <Text>
@@ -13,7 +14,17 @@ export default ({ onBackPress, onForwardPress, month, ...props }) => (
   </Wrapper>
 )
 
+export default MonthSelector
+
+MonthSelector.propTypes = {
+  onBackPress: PropTypes.func.isRequired,
+  onForwardPress: PropTypes.func.isRequired,
+  month: PropTypes.string
+}
+
 const Wrapper = styled.div`
+  width: 100%;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -31,9 +42,7 @@ const Text = styled.span`
   font-weight: 500;
 `
 
-const ArrowRight = styled(Icon).attrs({
-  source: require('./arrow_right.svg')
-})`
+const ArrowRight = styled(ArrowRightIcon)`
   padding: 0px;
   cursor: pointer;
   svg {
