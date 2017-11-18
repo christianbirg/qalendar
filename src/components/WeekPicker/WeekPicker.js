@@ -236,30 +236,30 @@ const Cell = styled.td.attrs({
   }
 
   &.--is-selected {
-    border-top: 1px solid #446CB3;
-    border-bottom: 1px solid #446CB3;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 
     &:first-child {
-      border-left: 1px solid #446CB3;
+      border-left: 1px solid #ddd;
     }
     &:last-child {
-      border-right: 1px solid #446CB3;
+      border-right: 1px solid #ddd;
     }
   }
 `
 
 const Row = styled.tr`
   &:hover {
-    background-color: #a1b5d9;
+    background-color: #f8f8f8;
     ${Cell} {
       color: black;
     }
     ${Cell}.--is-today {
-      background-color: #8ea6d1;
+      background-color: #f1f1f1;
     }
     ${Cell}:first-child, ${Cell}:last-child {
-      background-color: #446cb3;
-      color: white;
+      background-color: #ededed;
+      color: black;
     }
     ${Cell}:first-child {
       border-top-left-radius: 2px;
