@@ -29,7 +29,7 @@ const Week = (props) => {
         <DummyHeader />
         {
           days.map((day, index) => (
-            <Header> { day.format('dd') }</Header>
+            <Header key={index}> { day.format('dd') }</Header>
           ))
         }
       </HeaderWrapper>
