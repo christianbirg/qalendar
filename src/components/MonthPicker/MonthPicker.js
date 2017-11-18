@@ -133,7 +133,7 @@ MonthPicker.propTypes = {
 
 const Wrapper = styled.div`
   width: 251px;
-
+  border: 1px solid #ddd;
   background-color: white;
 
   user-select: none;
@@ -148,7 +148,6 @@ const Content = styled.div`
   padding: 8px;
   width: 100%;
 
-  border: 1px solid #EAEAEA;
   border-top: none;
 `
 
@@ -179,7 +178,7 @@ const Cell = styled.td.attrs({
   background-color: ${({ isCurrent }) => isCurrent ? '#F8F8F8' : 'white'};
   border: 1px solid transparent;
   &.--is-selected {
-    border: 1px solid #446CB3;
+    border: 1px solid #ddd;
   }
 `
 

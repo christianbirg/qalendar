@@ -31,8 +31,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  background-color: #446CB3;
+  background-color: #f1f1f1;
 
   * {
     box-sizing: border-box;
@@ -44,7 +43,7 @@ const Text = styled.span`
   flex: 1 0 auto;
   text-align: center;
   text-transform: uppercase;
-  color: white;
+  color: black;
 
   font-size: 14px;
   font-weight: 500;
@@ -56,7 +55,7 @@ const ArrowRight = styled(ArrowRightIcon)`
   svg {
     width: 28px;
     height: 28px;
-    fill: white;
+    fill: black;
   }
 `
 

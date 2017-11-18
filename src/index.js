@@ -10,7 +10,7 @@ import DateTypes from './types/DateTypes.js'
 
 import ControlPanel from './components/ControlPanel'
 
-import Month from './components/Month'
+import Month from './components/Month/Month.js'
 import Week from './components/Week'
 import Day from './components/Day'
 
@@ -50,6 +50,7 @@ class Qalendar extends React.PureComponent<Props> {
       <Wrapper>
         <ControlPanel
           date={this.state.date}
+          activeView={this.state.view}
           onSelectDate={this.onSelectDate}
           views={this.props.views}
           onSelectView={this.onSelectView}
@@ -65,9 +66,9 @@ class Qalendar extends React.PureComponent<Props> {
   renderView = () => {
     switch (this.state.view) {
       case Views.month:
-        return <Month />
+        return <Month date={this.state.date} />
       case Views.week:
-        return <Week date={this.state.date} />
+        return <Week date={this.state.date} stepDuration={this.props.duration} steps={this.props.slots} />
       case Views.day:
         return <Day />
     }
@@ -92,6 +93,10 @@ Qalendar.propTypes = {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+
+  * {
+    font-family: sans-serif;
+  }
 `
 
 const ViewWrapper = styled.div`
