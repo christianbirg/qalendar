@@ -5,7 +5,7 @@ import classiq from 'styled-classiq'
 
 import dateAdapter from '../../adapters/dateAdapter.js'
 
-import TimeScale from '../TimeScale'
+import TimeAxis from '../TimeScale/TimeAxis.js'
 import Day from '../Day'
 
 const Week = (props) => {
@@ -25,12 +25,24 @@ const Week = (props) => {
 
   return (
     <Wrapper>
+      <HeaderWrapper>
+        <DummyHeader />
+        {
+          days.map((day, index) => (
+            <Header> { day.format('dd') }</Header>
+          ))
+        }
+      </HeaderWrapper>
       <TimeScaleWrapper>
-        <Header />
-        <TimeScale {...timeScaleProps} />
+        <TimeAxis {...timeScaleProps} />
+        {
+          days.map((day, index) => (
+            <DayWrapper last={index === days.length - 1} key={`day:${day.format('dd:MM')}`}>
+              <Day day={day} {...timeScaleProps} />
+            </DayWrapper>
+          ))
+        }
       </TimeScaleWrapper>
-
-      { renderDays(days, timeScaleProps) }
     </Wrapper>
   )
 }
@@ -51,46 +63,42 @@ Week.propTypes = {
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+`
 
+const DummyHeader = styled.div`
+  flex: 0 0 auto;
+  width: 50px;
+  border-right: 1px solid #ddd;
+`
+
+const HeaderWrapper = styled.div`
+  flex: 0 1 auto;
   display: flex;
   flex-direction: row;
 `
 
 const TimeScaleWrapper = styled.div`
   flex: 1 0 auto;
-
-  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: row;
 `
 
-const renderDays = (days, timeScaleProps) => days.map((day, index) => (
-  <DayWrapper last={index === days.length - 1} key={`day:${day.format('dd:MM')}`}>
-    <Header>
-      { day.format('dd') }
-    </Header>
-    <Day day={day} {...timeScaleProps} />
-  </DayWrapper>
-))
-
-const DayWrapper = styled.div.attrs({
-  className: classiq((props) => ({
-    '--is-last': props.last
-  }))
-})`
+const DayWrapper = styled.div`
   flex: 1 0 auto;
-
   border-right: 1px solid #ddd;
 
-  &.--is-last {
-    border-right: none;
+  &:last-child {
+    border-right: 0;
   }
 `
 
 const Header = styled.div`
-  flex: 0 0 auto;
+  flex: 1 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-
   text-align: center;
   height: 32px;
 `

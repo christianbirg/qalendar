@@ -90,7 +90,7 @@ Qalendar.propTypes = {
 }
 
 const Wrapper = styled.div`
-  dislpay: flex;
+  display: flex;
   flex-direction: column;
 `
 
