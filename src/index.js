@@ -31,7 +31,10 @@ class Qalendar extends React.PureComponent<Props> {
   constructor (props) {
     super(props)
 
+    const events = this.normalizeData(props.events)
+
     this.state = {
+      events,
       view: props.defaultView,
       date: dateAdapter(props.date)
     }
@@ -43,6 +46,40 @@ class Qalendar extends React.PureComponent<Props> {
 
   onSelectDate = (date) => {
     this.setState({ date })
+  }
+
+  normalizeData (eventArray) {
+    const events = eventArray.map((event, index) => ({
+      ...event,
+      id: event.id || index,
+      start: dateAdapter(event.start),
+      end: dateAdapter(event.end)
+    }))
+
+    const eventsByDay = events.reduce((result, event) => {
+      const days = []
+      for (let day = event.start; day.isSameOrBefore(event.end); day = day.add(1, 'day')) {
+        days.push(day)
+      }
+
+      days.forEach((day) => {
+        const entry = result[day.format('DD/MM/YYYY')]
+        if (!Array.isArray(entry)) {
+          result[day.format('DD/MM/YYYY')] = [ event.id ]
+        } else {
+          result[day.format('DD/MM/YYYY')] = entry.concat(event.id)
+        }
+      })
+
+      return result
+    }, {})
+
+    return {
+      entries: events,
+      filters: {
+        byDay: eventsByDay
+      }
+    }
   }
 
   render () {
@@ -67,7 +104,7 @@ class Qalendar extends React.PureComponent<Props> {
       case Views.month:
         return <Month />
       case Views.week:
-        return <Week date={this.state.date} />
+        return <Week date={this.state.date} events={this.state.events} />
       case Views.day:
         return <Day />
     }
@@ -86,7 +123,11 @@ Qalendar.defaultProps = {
 Qalendar.propTypes = {
   date: PropTypes.oneOfType(DateTypes),
   views: PropTypes.arrayOf(PropTypes.oneOf(ViewsEnum)),
-  defaultView: PropTypes.oneOf(ViewsEnum)
+  defaultView: PropTypes.oneOf(ViewsEnum),
+  events: PropTypes.arrayOf(PropTypes.shape({
+    start: PropTypes.oneOfType(DateTypes).isRequired,
+    end: PropTypes.oneOfType(DateTypes).isRequired
+  })).isRequired
 }
 
 const Wrapper = styled.div`

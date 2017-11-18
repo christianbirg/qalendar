@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import classiq from 'styled-classiq'
 
 import dateAdapter from '../../adapters/dateAdapter.js'
 
@@ -9,7 +8,7 @@ import TimeAxis from '../TimeScale/TimeAxis.js'
 import Day from '../Day'
 
 const Week = (props) => {
-  const { date } = props
+  const { date, events } = props
   const timeScaleProps = {
     steps: props.steps,
     stepDuration: props.stepDuration
@@ -38,7 +37,7 @@ const Week = (props) => {
         {
           days.map((day, index) => (
             <DayWrapper last={index === days.length - 1} key={`day:${day.format('dd:MM')}`}>
-              <Day day={day} {...timeScaleProps} />
+              <Day day={day} events={events} {...timeScaleProps} />
             </DayWrapper>
           ))
         }
@@ -55,9 +54,20 @@ Week.defaultProps = {
 }
 
 Week.propTypes = {
-  date: PropTypes.instanceOf(dateAdapter),
+  date: PropTypes.instanceOf(dateAdapter).isRequired,
   steps: PropTypes.number,
-  stepDuration: PropTypes.number
+  stepDuration: PropTypes.number,
+  events: PropTypes.shape({
+    entries: PropTypes.arrayOf(PropTypes.shape({
+      start: PropTypes.instanceOf(dateAdapter),
+      end: PropTypes.instanceOf(dateAdapter)
+    })).isRequired,
+    filters: PropTypes.shape({
+      byDay: PropTypes.objectOf(
+        PropTypes.arrayOf(PropTypes.number)
+      ).isRequired
+    }).isRequired
+  }).isRequired
 }
 
 const Wrapper = styled.div`
