@@ -8,6 +8,7 @@ const TimeAxis = (props) => {
   return (
     <TimeAxisWrapper>
       <TimeScale {...props} />
+      { props.children }
     </TimeAxisWrapper>
   )
 }
@@ -25,7 +26,6 @@ TimeAxis.propTypes = {
 }
 
 const TimeAxisWrapper = styled.div`
-  position: relative;
   flex: 0 0 auto;
   width: 50px;
   border-right: 1px solid #ddd;
