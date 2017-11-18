@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import dateAdapter from '../../adapters/dateAdapter.js'
 
 import TimeAxis from '../TimeScale/TimeAxis.js'
+import TimeIndicator from '../TimeIndicator/TimeIndicator.js'
 import Day from '../Day'
 
 const Week = (props) => {
@@ -33,7 +34,9 @@ const Week = (props) => {
         }
       </HeaderWrapper>
       <TimeScaleWrapper>
-        <TimeAxis {...timeScaleProps} />
+        <TimeAxis {...timeScaleProps}>
+          <TimeIndicator date={props.date} />
+        </TimeAxis>
         {
           days.map((day, index) => (
             <DayWrapper last={index === days.length - 1} key={`day:${day.format('dd:MM')}`}>
@@ -90,6 +93,7 @@ const HeaderWrapper = styled.div`
 `
 
 const TimeScaleWrapper = styled.div`
+  position: relative;
   flex: 1 0 auto;
   display: flex;
   flex-direction: row;
