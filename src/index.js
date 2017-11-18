@@ -105,11 +105,7 @@ class Qalendar extends React.PureComponent<Props> {
       case Views.month:
         return <Month date={this.state.date} />
       case Views.week:
-<<<<<<< HEAD
-        return <Week date={this.state.date} events={this.state.events} />
-=======
-        return <Week date={this.state.date} stepDuration={this.props.duration} steps={this.props.slots} />
->>>>>>> 81f81b22b97ad2c0efdd7578a7fe20c1e50a9c12
+        return <Week date={this.state.date} events={this.state.events} stepDuration={this.props.duration} steps={this.props.slots} />
       case Views.day:
         return <Day />
     }
