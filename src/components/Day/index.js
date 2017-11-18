@@ -92,7 +92,7 @@ class Day extends React.Component {
       return true
     }
 
-    const result = events.reduce((result, event) => {
+    return events.sort((a, b) => a.start.isBefore(b.start) ? 1 : a.start.isSame(b.start, 'minute') ? 0 : -1).reduce((result, event) => {
       const remainingEvents = events.filter((e) => e !== event)
       const overlappingEventsCount = remainingEvents.reduce((result, otherEvent) => eventsOverlap(event, otherEvent) ? result + 1 : result, 1)
       const eventIndex = remainingEvents.reduce((result, otherEvent) => eventsOverlap(event, otherEvent) && otherEvent.start.isSameOrBefore(event.start) ? result + 1 : result, 0)
@@ -104,17 +104,6 @@ class Day extends React.Component {
 
       return result
     }, {})
-
-    const test = events.sort((a, b) => a.start.isBefore(b.start) ? 1 : -1).reduce((result, event) => {
-      const remainingEvents = events.filter((e) => e !== event)
-      const overlappingEvents = remainingEvents.filter((otherEvent) => eventsOverlap(event, otherEvent))
-
-      result[event.id].index = overlappingEvents.some((event) => result[event.id].index === 0) ? result[event.id].index : 0
-
-      return result
-    }, result)
-
-    return test
   }
 
   render () {
