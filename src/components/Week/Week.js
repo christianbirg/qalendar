@@ -6,7 +6,7 @@ import dateAdapter from '../../adapters/dateAdapter.js'
 
 import TimeAxis from '../TimeScale/TimeAxis.js'
 import TimeIndicator from '../TimeIndicator/TimeIndicator.js'
-import Day from '../Day'
+import Day from '../Day/Day.js'
 
 const Week = (props) => {
   const { date, events } = props

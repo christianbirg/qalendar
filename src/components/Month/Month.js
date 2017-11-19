@@ -4,28 +4,30 @@ import styled from 'styled-components'
 
 import dateAdapter from '../../adapters/dateAdapter.js'
 
-const Month = (props) => {
-  const { date } = props
+class Month extends React.PureComponent {
+  render () {
+    let { date, steps, stepDuration } = this.props
 
-  const days = []
-  let currentDay = date.startOf('week')
-  const endOfWeek = date.endOf('week')
-  while (currentDay.isSameOrBefore(endOfWeek)) {
-    days.push(currentDay)
-    currentDay = currentDay.add(1, 'day')
+    const weekdays = []
+    let currentDay = date.startOf('week')
+    const endOfWeek = date.endOf('week')
+    while (currentDay.isSameOrBefore(endOfWeek)) {
+      weekdays.push(currentDay)
+      currentDay = currentDay.add(1, 'day')
+    }
+
+    return (
+      <Wrapper>
+        <HeaderWrapper>
+          {
+            weekdays.map((day, index) => (
+              <Header key={index}> { day.format('dd') }</Header>
+            ))
+          }
+        </HeaderWrapper>
+      </Wrapper>
+    )
   }
-
-  return (
-    <Wrapper>
-      <HeaderWrapper>
-        {
-          days.map((day, index) => (
-            <Header key={index}> { day.format('dd') }</Header>
-          ))
-        }
-      </HeaderWrapper>
-    </Wrapper>
-  )
 }
 
 export default Month

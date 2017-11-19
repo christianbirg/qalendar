@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import classiq from 'styled-classiq'
 
@@ -49,7 +50,6 @@ export default class ControlPanel extends React.PureComponent {
   }
 
   onSelectDate = (date) => {
-    console.log(date)
     this.setState({
       open: false
     }, () => {
@@ -65,11 +65,16 @@ export default class ControlPanel extends React.PureComponent {
             this.getDisplayRange()
           }
         </Display>
-        <Popup shown={this.state.open}>
-          {
-            this.renderPicker()
-          }
-        </Popup>
+        {
+          ReactDOM.createPortal(<div><OverlayWrapper shown={this.state.open}>
+            <Overlay />
+            <Popup>
+              {
+                this.renderPicker()
+              }
+            </Popup>
+          </OverlayWrapper></div>, document.querySelector('body'))
+        }
       </DateRangeDisplayWrapper>
     )
   }
@@ -87,19 +92,10 @@ export default class ControlPanel extends React.PureComponent {
   }
 }
 
-const Popup = styled.div.attrs({
-  className: classiq((props) => ({
-    '--is-visible': props.shown
-  }))
-})`
-  display: none;
-  position: absolute;
-  z-index: 9000;
-  top: 32px;
-  left: 0;
-  &.--is-visible {
-    display: block;
-  }
+const Popup = styled.div`
+  position: relative;
+  z-index: 1001;
+  margin: auto;
 `
 
 const Display = styled.div`
@@ -121,4 +117,31 @@ const Display = styled.div`
 const DateRangeDisplayWrapper = styled.div`
   position: relative;
   width: 170px;
+`
+
+const OverlayWrapper = styled.div.attrs({
+  className: classiq((props) => ({
+    '--is-visible': props.shown
+  }))
+})`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  &.--is-visible {
+    display: flex;
+  }
+`
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width:100%;
+  background: rgba(0,0,0, 0.3);
 `

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -11,33 +10,20 @@ import DateTypes from './types/DateTypes.js'
 import ControlPanel from './components/ControlPanel'
 
 import Month from './components/Month/Month.js'
-import Week from './components/Week'
-import Day from './components/Day'
+import Week from './components/Week/Week.js'
+import Day from './components/Day/Day.js'
 
 moment.locale('de')
 
-type View = Views.month | Views.week | Views.day
+class Qalendar extends React.PureComponent {
+  componentWillMount () {
+    const events = this.normalizeData(this.props.events)
 
-type Props = {
-  date: any,
-  defaultView: View,
-  views: Array<View>,
-  onDateChange: any,
-  slots: any,
-  duration: any
-}
-
-class Qalendar extends React.PureComponent<Props> {
-  constructor (props) {
-    super(props)
-
-    const events = this.normalizeData(props.events)
-
-    this.state = {
+    this.setState({
       events,
-      view: props.defaultView,
-      date: dateAdapter(props.date)
-    }
+      view: this.props.defaultView,
+      date: dateAdapter(this.props.date)
+    })
   }
 
   onSelectView = (view) => {
@@ -107,7 +93,7 @@ class Qalendar extends React.PureComponent<Props> {
       case Views.week:
         return <Week date={this.state.date} events={this.state.events} stepDuration={this.props.duration} steps={this.props.slots} />
       case Views.day:
-        return <Day />
+        return <Day date={this.state.date} events={this.state.events} stepDuration={this.props.duration} steps={this.props.slots} />
     }
   }
 }

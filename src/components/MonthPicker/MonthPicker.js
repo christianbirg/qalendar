@@ -142,12 +142,13 @@ const Wrapper = styled.div`
 const YearSelector = styled(StandardYearSelector)`
   width: 100%;
   padding: 8px;
+  box-sizing: border-box;
 `
 
 const Content = styled.div`
   padding: 8px;
   width: 100%;
-
+  box-sizing: border-box;
   border-top: none;
 `
 
@@ -170,6 +171,7 @@ const Cell = styled.td.attrs({
   font-size: 12px;
 
   padding: 16px;
+  box-sizing: border-box;
 
   &:hover {
     background-color: #a1b5d9;
