@@ -73,6 +73,10 @@ class DateProxy {
     return this.isBefore(otherDate, unit) || this.isSame(otherDate, unit)
   }
 
+  isSameOrAfter = (otherDate, unit) => {
+    return this.isAfter(otherDate, unit) || this.isSame(otherDate, unit)
+  }
+
   diff = (otherDate) => {
     return this._getUnderlyingDateObject().diff(otherDate._getUnderlyingDateObject())
   }

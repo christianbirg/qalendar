@@ -81,24 +81,37 @@ class Day extends React.Component {
 
   calculateEventOverlapping = (events) => {
     const eventsOverlap = (event, otherEvent) => {
-      if (event.start.isAfter(otherEvent.end)) {
+      if (event.start.isSameOrAfter(otherEvent.end)) {
         return false
       }
 
-      if (event.end.isBefore(otherEvent.start)) {
+      if (event.end.isSameOrBefore(otherEvent.start)) {
         return false
       }
 
       return true
     }
 
-    return events.sort((a, b) => a.start.isBefore(b.start) ? 1 : a.start.isSame(b.start, 'minute') ? 0 : -1).reduce((result, event) => {
+    return events.sort((a, b) => a.start.isBefore(b.start)
+      ? -1
+      : a.start.isSame(b.start, 'minute')
+        ? a.end.isBefore(b.end)
+          ? 1 // a is shorter than b
+          : a.end.isSame(b.end)
+            ? 0 // they have the same length and the same start
+            : -1 // a is longer than b
+        : 1
+    ).reduce((result, event) => {
       const remainingEvents = events.filter((e) => e !== event)
-      const overlappingEventsCount = remainingEvents.reduce((result, otherEvent) => eventsOverlap(event, otherEvent) ? result + 1 : result, 1)
-      const eventIndex = remainingEvents.reduce((result, otherEvent) => eventsOverlap(event, otherEvent) && otherEvent.start.isSameOrBefore(event.start) ? result + 1 : result, 0)
+      const overlappingEvents = remainingEvents.filter((otherEvent) => eventsOverlap(event, otherEvent))
+      const eventIndex = overlappingEvents
+        .filter((event) => typeof result[event.id] === 'object')
+        .map((event) => result[event.id].index)
+        .sort((a, b) => a - b)
+        .reduce((result, index) => index === result ? result + 1 : result, 0)
 
       result[event.id] = {
-        count: overlappingEventsCount,
+        count: overlappingEvents.length,
         index: eventIndex
       }
 
@@ -149,9 +162,8 @@ class Day extends React.Component {
 
   calculateHorizontalPosition = (event) => {
     const overlappingEvents = this.state.eventOverlapping[event.id]
-    console.log(overlappingEvents)
 
-    if (overlappingEvents.count > 1) {
+    if (overlappingEvents.count > 0) {
       /* return {
         left: overlappingEvents.index * (100 / overlappingEvents.count),
         right: (overlappingEvents.count - overlappingEvents.index - 1) * (100 / overlappingEvents.count)
@@ -167,18 +179,16 @@ class Day extends React.Component {
       }
     } else {
       return {
-        right: 0,
-        left: 0,
+        right: 2,
+        left: 2,
         zIndex: 1
       }
     }
   }
 
   renderEvent = (event) => {
-    console.log(event.start.format('HH:mm dd'), event.end.format('HH:mm dd'))
     const verticalPosition = this.calculateVerticalPosition(event)
     const horizontalPosition = this.calculateHorizontalPosition(event)
-    console.log(horizontalPosition)
 
     return <Event key={event.id} style={{
       top: `${verticalPosition.top}%`,
