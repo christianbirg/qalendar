@@ -76,6 +76,34 @@ class DateProxy {
   diff = (otherDate) => {
     return this._getUnderlyingDateObject().diff(otherDate._getUnderlyingDateObject())
   }
+
+  weekDays = () => {
+    const days = []
+    let currentDay = this.startOf('week')
+    const endOfWeek = this.endOf('week')
+    while (currentDay.isSameOrBefore(endOfWeek)) {
+      days.push(currentDay)
+      currentDay = currentDay.add(1, 'day')
+    }
+
+    return days
+  }
+
+  monthMatrix = (generatorFunction = (date) => date) => {
+    const matrix = [[]]
+    let currentMonthDay = this.startOf('month').startOf('week')
+    const endOfMonth = this.endOf('month').endOf('week')
+    while (currentMonthDay.isSameOrBefore(endOfMonth)) {
+      matrix[matrix.length - 1].push(generatorFunction(currentMonthDay)) // push day to current week
+
+      if (currentMonthDay.isSame(currentMonthDay.endOf('week'), 'day')) { // if the current day was the last day of a week, start a new week
+        matrix.push([])
+      }
+      currentMonthDay = currentMonthDay.add(1, 'day') // increment day
+    }
+
+    return matrix.filter((week) => week.length > 0)
+  }
 }
 
 const createDate = (value, arg1) => {

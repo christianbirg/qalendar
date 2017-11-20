@@ -33,33 +33,9 @@ class WeekPicker extends React.PureComponent {
   })
 
   calculateLines = (month, selectedWeek) => {
-    let lines = [ [] ]
-    const firstDayOfMonth = month.startOf('month')
     const today = dateAdapter()
 
-    let day = firstDayOfMonth.startOf('week')
-    let endOfWeek = day.endOf('week')
-    while (day.isSameOrBefore(month, 'month')) {
-      lines[lines.length - 1].push(this.generateEntry(day, today, selectedWeek, month))
-
-      if (day.isSame(endOfWeek, 'day')) {
-        lines.push([])
-        endOfWeek = endOfWeek.add(7, 'day').endOf('week')
-      }
-
-      day = day.add(1, 'day')
-    }
-
-    if (lines[lines.length - 1].length === 0) { // in case the last day of the month was a sunday
-      lines.pop()
-    }
-
-    while (lines[lines.length - 1].length < 7) {
-      lines[lines.length - 1].push(this.generateEntry(day, today, selectedWeek, month))
-      day = day.add(1, 'day')
-    }
-
-    return lines
+    return month.monthMatrix((day) => this.generateEntry(day, today, selectedWeek, month))
   }
 
   selectPreviousMonth = () => {

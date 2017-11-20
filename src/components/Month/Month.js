@@ -5,43 +5,10 @@ import styled from 'styled-components'
 import dateAdapter from '../../adapters/dateAdapter.js'
 
 class Month extends React.PureComponent {
-  getWeekdays () {
-    let { date } = this.props
-
-    const weekdays = []
-    let currentWeekDay = date.startOf('week')
-    const endOfWeek = date.endOf('week')
-    while (currentWeekDay.isSameOrBefore(endOfWeek)) {
-      weekdays.push(currentWeekDay)
-      currentWeekDay = currentWeekDay.add(1, 'day')
-    }
-    return weekdays
-  }
-
-  getMonthdays () {
-    let { date } = this.props
-
-    const monthdays = []
-    let currentMonthDay = date.startOf('month').startOf('week')
-    const endOfMonth = date.endOf('month').endOf('week')
-    while (currentMonthDay.isSameOrBefore(endOfMonth)) {
-      monthdays.push(currentMonthDay)
-      currentMonthDay = currentMonthDay.add(1, 'day')
-    }
-
-    return monthdays.reduce((list, day, i) => {
-      let pos = (i/7)|0
-      list[pos] = list[pos] || []
-      list[pos].push(day)
-
-      return list
-    }, [])
-  }
-
   render () {
-    const weekdays = this.getWeekdays()
-    const monthdays = this.getMonthdays()
-    console.log(monthdays)
+    const weekdays = this.props.date.weekDays()
+    const monthdays = this.props.date.monthMatrix()
+
     return (
       <Wrapper>
         <HeaderWrapper>
@@ -73,15 +40,10 @@ class Month extends React.PureComponent {
 
 export default Month
 
-Month.defaultProps = {
-  steps: 4,
-  stepDuration: 15
-}
+Month.defaultProps = {}
 
 Month.propTypes = {
-  date: PropTypes.instanceOf(dateAdapter),
-  steps: PropTypes.number,
-  stepDuration: PropTypes.number
+  date: PropTypes.instanceOf(dateAdapter).isRequired
 }
 
 const Wrapper = styled.div`
