@@ -44,7 +44,7 @@ class Qalendar extends React.PureComponent {
 
     const eventsByDay = events.reduce((result, event) => {
       const days = []
-      for (let day = event.start; day.isSameOrBefore(event.end); day = day.add(1, 'day')) {
+      for (let day = event.start; day.isSameOrBefore(event.end, 'day'); day = day.add(1, 'day')) {
         days.push(day)
       }
 
