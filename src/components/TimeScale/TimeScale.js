@@ -2,31 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import dateAdapter from '../../adapters/dateAdapter.js'
+import calculateSlotGroups from './CalculateSlotGroups.js'
 
 import TimeSlotGroup from './TimeSlotGroup'
 
 const TimeScale = (props) => {
-  const { steps, stepDuration, withoutText } = props
-
-  const day = dateAdapter()
-  const endOfDay = day.endOf('day')
-
-  let currentTime = day.startOf('day')
-  const times = []
-  while (currentTime.isSameOrBefore(endOfDay)) {
-    times.push(currentTime)
-    currentTime = currentTime.add(stepDuration * steps, 'minute')
-  }
+  const { steps, stepDuration } = props
 
   return (
     <Wrapper>
       {
-        times.map((time, index) => {
-          const text = withoutText ? '' : time.format('HH:mm')
-
+        calculateSlotGroups(steps, stepDuration).map((time, index) => {
           return (
-            <TimeSlotGroup text={text} steps={steps} key={`TimeScale:${text}/${index}`} />
+            <TimeSlotGroup steps={steps} key={`TimeScale:${time.format('hh:mm')}/${index}`} />
           )
         })
       }
@@ -42,8 +30,7 @@ TimeScale.defaultProps = {
 
 TimeScale.propTypes = {
   steps: PropTypes.number.isRequired,
-  stepDuration: PropTypes.number.isRequired,
-  withoutText: PropTypes.bool
+  stepDuration: PropTypes.number.isRequired
 }
 
 const Wrapper = styled.div`
