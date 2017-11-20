@@ -4,11 +4,11 @@ import styled from 'styled-components'
 
 import TimeScale from './TimeScale.js'
 
-const TimeAxis = (props) => {
+const TimeAxis = ({ children, ...props }) => {
   return (
     <TimeAxisWrapper>
       <TimeScale {...props} />
-      { props.children }
+      { children }
     </TimeAxisWrapper>
   )
 }
