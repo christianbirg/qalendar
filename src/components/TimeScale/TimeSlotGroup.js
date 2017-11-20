@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 const TimeSlotGroup = (props) => {
-  const { text, steps } = props
+  const { caption, steps } = props
 
   let renderSlots = (length) => Array.apply(null, { length }).map((_, i) => (
-    <TimeSlot key={`timeslot:${text}/${i}`} />
+    <TimeSlot key={`timeslot:${caption}/${i}`} />
   ))
 
   return (
@@ -13,11 +13,15 @@ const TimeSlotGroup = (props) => {
       {
         renderSlots(steps)
       }
-      <TimeSlotCaptionContainer>
-        <TimeSlotCaption>
-          { text }
-        </TimeSlotCaption>
-      </TimeSlotCaptionContainer>
+      {
+        caption && (
+          <TimeSlotCaptionContainer>
+            <TimeSlotCaption>
+              { caption }
+            </TimeSlotCaption>
+          </TimeSlotCaptionContainer>
+        )
+      }
     </TimeSlotWrapper>
   )
 }
